@@ -8,222 +8,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root{
-      --bg: #1a0f1b;
-      --card: rgba(255,255,255,.06);
-      --muted: rgba(255,255,255,.7);
-      --text: #ffe9f6;
-      --accent: #ff80ab;   /* blossom pink */
-      --accent-2:#ffb6d9; /* soft cherry blossom */
-      --danger:#ff6b8b;   /* pinkish danger */
-      --warning:#ffd6a5;
-      --ring: 0 0 0 2px rgba(255,128,171,.3), 0 10px 25px rgba(0,0,0,.35);
-      --radius: 18px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      color:var(--text);
-      background: radial-gradient(1200px 800px at 15% -10%, #311b2d, transparent 60%),
-                  radial-gradient(900px 600px at 110% 20%, #2c122b, transparent 60%),
-                  linear-gradient(180deg,#1a0f1b,#120812 60%,#0a050a);
-      display:flex; min-height:100vh; overflow:hidden;
-    }
-    /* Layout */
-    .shell{display:grid; grid-template-columns: 260px 1fr; width:100%;}
-    .sidebar{position:relative; height:100vh; padding:22px 16px;
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border-right:1px solid rgba(255,255,255,.08);}
-    .brand{display:flex; align-items:center; gap:10px; margin:8px 6px 20px;}
-    .logo{width:36px; height:36px; border-radius:12px;
-      background:linear-gradient(135deg,var(--accent),#ff99cc);
-      box-shadow:0 10px 30px rgba(255,128,171,.25);}
-    .brand h1{font-size:16px; letter-spacing:.4px; margin:0; font-weight:700}
-    .nav{display:flex; flex-direction:column; gap:8px;}
-    .nav button{
-      display:flex; gap:10px; align-items:center; width:100%; padding:12px 14px;
-      background:transparent; border:1px solid transparent; border-radius:14px;
-      color:var(--muted); cursor:pointer; font-weight:600; transition:.2s;
-    }
-    .nav button:hover{background:rgba(255,255,255,.05); color:var(--text)}
-    .nav button.active{
-      background:linear-gradient(180deg, rgba(255,128,171,.18), rgba(255,182,217,.08));
-      color:var(--text); border-color:rgba(255,128,171,.35); box-shadow:var(--ring)
-    }
-    .nav .pill{margin:8px 4px 14px; height:1px; background:rgba(255,255,255,.08)}
-    .content{position:relative; height:100vh; overflow:auto;}
-    .topbar{
-      position:sticky; top:0; z-index:3; backdrop-filter:saturate(140%) blur(10px);
-      background:rgba(26,15,27,.65); border-bottom:1px solid rgba(255,255,255,.08);
-      display:flex; align-items:center; gap:14px; padding:14px 20px;
-    }
-    .search{flex:1; display:flex; align-items:center; gap:10px; background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:10px 12px;}
-    .search input{flex:1; background:transparent; border:0; color:var(--text); outline:none}
-    .chip{padding:6px 10px; border:1px solid rgba(255,255,255,.12); color:var(--muted); border-radius:999px; font-size:12px}
-    .profile{margin-left:auto; position:relative;}
-    .profile-card{
-      display:none;
-      position:absolute;
-      right:0;
-      top:40px;
-      background:var(--card);
-      padding:12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.12);
-      width:220px;
-      z-index:5;
-    }
-    .modal{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.5);
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      z-index:10;
-    }
-    .modal-content{
-      background:var(--card);
-      padding:20px;
-      border-radius:12px;
-      width:300px;
-    }
-    .modal input{width:100%; padding:10px; margin:6px 0; border-radius:8px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.06); color:var(--text)}
-    .btn{display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.14); background:linear-gradient(180deg, rgba(255,182,217,.18), rgba(255,182,217,.06)); color:var(--text); font-weight:700; cursor:pointer}
-    .btn.secondary{background:linear-gradient(180deg, rgba(255,128,171,.18), rgba(255,128,171,.06))}
-    .btn.danger{background:linear-gradient(180deg, rgba(255,107,139,.18), rgba(255,107,139,.06))}
-    .btn.voice-to-text { font-size: 1.5em; padding: 10px; }
-
-    .grid{display:grid; gap:16px; padding:20px; grid-template-columns: repeat(12, 1fr);}
-    .card{background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:16px; box-shadow:0 12px 30px rgba(0,0,0,.25)}
-    .card h2{margin:0 0 10px; font-size:16px}
-    .muted{color:var(--muted)}
-
-    /* Resizable columns for hero widgets */
-    .span-4{grid-column: span 4}
-    .span-6{grid-column: span 6}
-    .span-8{grid-column: span 8}
-    .span-12{grid-column: span 12}
-
-    /* Forms */
-    .row{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-    .stack{display:flex; flex-direction:column; gap:8px}
-    .input, textarea, select{width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06); color:var(--text); outline:none}
-    textarea{min-height:100px; resize:vertical}
-
-    /* Calendar */
-    .calendar{display:grid; grid-template-rows:auto auto 1fr; gap:10px; grid-template-columns: repeat(7, 1fr);}
-    .calendar .cal-head{display:flex; align-items:center; justify-content:space-between}
-    .calendar .cal-week{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; font-size:12px; color:var(--muted)}
-    .calendar .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:6px}
-    .day{aspect-ratio:1/1; border-radius:12px; border:1px dashed rgba(255,255,255,.08); display:flex; flex-direction: column; align-items:flex-start; justify-content:flex-start; padding:8px; position:relative; cursor:pointer; min-height: 80px;}
-    .day.other{opacity:.35}
-    .day .num{font-size:12px; color:var(--muted)}
-    .day.today{border-color:var(--accent); box-shadow:0 0 0 2px rgba(124,243,255,.28) inset}
-    .dot{position:absolute; left:8px; bottom:8px; width:6px; height:6px; border-radius:999px; background:var(--accent-2)}
-    .dot.miss{background:var(--danger)}
-    .task { background: var(--accent); color: var(--text); border-radius: 4px; margin-top: 5px; padding: 2px; font-size: 12px; }
-    .calendar .task{ color: white;}
-
-    /* Task list */
-    .tasks{display:flex; flex-direction:column; gap:10px}
-    .task{display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05)}
-    .task.done{opacity:.6}
-    .badge{font-size:12px; padding:6px 8px; border:1px solid rgba(255,255,255,.16); color:var(--muted); border-radius:999px;}
-    .gamification-badges { display: flex; gap: 8px; margin-top: 10px; }
-    .gamification-badges .badge {
-      background: linear-gradient(135deg, gold, #ffcc00);
-      color: #333;
-      border: 1px solid #ffcc00;
-      font-weight: bold;
-    }
-
-    /* Checklist */
-    .checklist{display:flex; flex-direction:column; gap:8px}
-    .check{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05)}
-    .check.done { text-decoration: line-through; opacity: 0.6; }
-
-    /* Notes */
-    .note{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05)}
-
-    /* Progress ring */
-    .ring{--p:0; width:120px; height:120px; border-radius:50%; background:
-      conic-gradient(var(--accent-2) calc(var(--p)*1%), rgba(255,255,255,.08) 0);
-      display:grid; place-items:center; margin:auto; transition: background .5s ease-out;}
-    .ring .inner{width:86px; height:86px; border-radius:50%; background:var(--card); display:grid; place-items:center; font-weight:800}
-
-    /* Timeline */
-    .timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      padding: 20px;
-      position: relative;
-    }
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 30px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: rgba(255, 255, 255, 0.1);
-    }
-    .timeline-item {
-      display: grid;
-      grid-template-columns: 60px 1fr;
-      gap: 20px;
-      align-items: center;
-    }
-    .timeline-date {
-      font-weight: bold;
-      color: var(--accent);
-      position: relative;
-    }
-    .timeline-date::before {
-      content: '';
-      position: absolute;
-      left: -32px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-    .timeline-content {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 15px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-
-    /* Responsive */
-    @media (max-width: 980px){
-      .shell{grid-template-columns: 80px 1fr}
-      .brand h1{display:none}
-      .nav button span.label{display:none}
-    }
-    @media (max-width: 720px){
-      .grid{grid-template-columns: repeat(6,1fr)}
-      .span-8{grid-column: span 6}
-      .span-6{grid-column: span 6}
-      .span-4{grid-column: span 6}
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uW/jW6sXlFkw56b/8p/t/eL/6A+uP/K1Lg0J/h1Dk/x6vL5n82/R7tC+yGkXvE+T6V+tA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="shell">
     <aside class="sidebar">
       <div class="brand">
-        <div class="logo"></div>
+        <div class="logo">
+            <i class="fa-solid fa-seedling" style="color:white; font-size: 24px;"></i>
+        </div>
         <h1>Time Capsule</h1>
       </div>
       <div class="nav">
+        <button onclick="window.location.href='about.html'">ℹ️ <span class="label">About</span></button>
         <button class="active" data-view="dashboard">🏠 <span class="label">Dashboard</span></button>
         <button data-view="notes">📝 <span class="label">Notes</span></button>
         <button data-view="calendar">📅 <span class="label">Calendar</span></button>
@@ -266,6 +64,18 @@
         </div>
       </div>
 
+      <div class="modal" id="delete-modal">
+        <div class="delete-modal-content">
+          <h3>Confirm Deletion</h3>
+          <p>Are you sure you want to delete all data? This cannot be undone.</p>
+          <div class="delete-modal-buttons">
+              <button class="btn danger" id="confirm-delete">Yes, Delete All</button>
+              <button class="btn secondary" id="cancel-delete">Cancel</button>
+          </div>
+        </div>
+      </div>
+      
+
       <section id="view-dashboard" class="grid">
         <div class="card span-4">
           <h2>Progress</h2>
@@ -294,7 +104,7 @@
           <textarea id="today-note" class="note" placeholder="How are you feeling today?"></textarea>
           <div style="display:flex; gap:10px; margin-top:8px">
             <button class="btn" id="save-today-note">Save Note</button>
-            <button class="btn secondary" id="today-note-voice" class="btn voice-to-text">🎤</button>
+            <button class="btn secondary" id="today-note-voice">🎤</button>
             <button class="btn secondary" data-view-link="notes">Open Notes</button>
           </div>
         </div>
@@ -310,7 +120,7 @@
           <textarea id="note-body" placeholder="Write a note to future you... (locked until date above if set)"></textarea>
           <div style="display:flex; gap:10px; margin-top:8px">
             <button class="btn" id="add-note">+ Save Note</button>
-            <button class="btn secondary" id="note-voice" class="btn voice-to-text">🎤</button>
+            <button class="btn secondary" id="note-voice">🎤</button>
           </div>
         </div>
         <div class="card span-12">
@@ -327,10 +137,12 @@
                 <input class="input" type="date" id="taskDate" style="flex:1;">
                 <button class="btn" onclick="saveTask()">Save</button>
             </div>
-
-            <h2>Tasks</h2>
-            <ul id="taskList"></ul>
-
+            <h2>Calendar</h2>
+            <div class="calendar-controls">
+                <button class="btn secondary" id="prev-month"> &lt; Prev </button>
+                <h3 id="calendar-month-year"></h3>
+                <button class="btn secondary" id="next-month"> Next &gt; </button>
+            </div>
             <div class="calendar" id="calendar"></div>
         </div>
       </section>
@@ -345,11 +157,18 @@
           <textarea id="task-note" placeholder="Add details or a note to your future self..."></textarea>
           <div style="display:flex; gap:10px; margin-top:8px">
             <button id="add-task" class="btn">+ Add Task</button>
-            <button class="btn secondary" id="task-note-voice" class="btn voice-to-text">🎤</button>
+            <button class="btn secondary" id="task-note-voice">🎤</button>
           </div>
         </div>
         <div class="card span-12">
           <h2>All Tasks</h2>
+          <div id="task-controls" style="margin-bottom: 12px; display: flex; gap: 10px;">
+              <select id="task-sort-by">
+                  <option value="date-asc">Sort by Date (Asc)</option>
+                  <option value="date-desc">Sort by Date (Desc)</option>
+                  <option value="status">Sort by Status</option>
+              </select>
+          </div>
           <div id="task-list" class="tasks"></div>
         </div>
       </section>
@@ -387,490 +206,12 @@
           </div>
       </section>
 
+
     </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    // Profile toggle and localStorage for user data
-    const profileBtn = document.getElementById('profile-btn');
-    const profileCard = document.getElementById('profile-card');
-    const regModal = document.getElementById('reg-modal');
-
-    function showProfileCard(show=true){ profileCard.style.display = show?'block':'none'; }
-    profileBtn.addEventListener('click', ()=>{ profileCard.style.display = profileCard.style.display==='block'?'none':'block'; });
-
-    const STORAGE_KEY_USER = 'timecapsule-user';
-    function loadProfile(){
-      const data = JSON.parse(localStorage.getItem(STORAGE_KEY_USER));
-      if(!data){
-        regModal.style.display='flex';
-      } else {
-        regModal.style.display='none';
-        document.getElementById('p-name').textContent = data.name;
-        document.getElementById('p-age').textContent = data.age;
-        document.getElementById('p-phone').textContent = data.phone;
-        document.getElementById('p-email').textContent = data.email;
-      }
-    }
-
-    document.getElementById('reg-save').addEventListener('click', ()=>{
-      const name = document.getElementById('reg-name').value;
-      const age = document.getElementById('reg-age').value;
-      const phone = document.getElementById('reg-phone').value;
-      const email = document.getElementById('reg-email').value;
-      if(name && age && phone && email){
-        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify({name,age,phone,email}));
-        regModal.style.display='none';
-        loadProfile();
-      } else alert('Fill all fields!');
-    });
-
-    document.getElementById('logout').addEventListener('click', ()=>{
-      localStorage.removeItem(STORAGE_KEY_USER);
-      location.reload();
-    });
-
-    loadProfile();
-
-    // ---- Data Store (localStorage) ----
-    const store = {
-      key: 'timecapsule-v1',
-      data: { tasks: [], notes: [], checklist: [] },
-      load(){
-        try{ const raw = localStorage.getItem(this.key); if(raw){ this.data = JSON.parse(raw);} }catch(e){ console.warn('Load failed', e) }
-      },
-      save(){ localStorage.setItem(this.key, JSON.stringify(this.data)); refresh(); }
-    };
-    store.load();
-
-    // ---- Utilities ----
-    const $ = sel => document.querySelector(sel);
-    const $$ = sel => Array.from(document.querySelectorAll(sel));
-    const fmtDateTime = d => new Date(d).toLocaleString([], { dateStyle:'medium', timeStyle:'short' });
-    const fmtDate = d => new Date(d).toLocaleDateString([], { dateStyle:'medium' });
-    const isSameDay = (a,b)=>{const A=new Date(a),B=new Date(b);return A.getFullYear()==B.getFullYear() && A.getMonth()==B.getMonth() && A.getDate()==B.getDate()}
-
-    // ---- Voice-to-Text ----
-    function startVoiceInput(textareaId) {
-      if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
-        alert('Your browser does not support Voice-to-Text. Please use Chrome, Edge, or a similar browser.');
-        return;
-      }
-      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-      const textarea = document.getElementById(textareaId);
-      recognition.lang = 'en-US';
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-
-      recognition.start();
-
-      recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        textarea.value += transcript + ' ';
-      };
-
-      recognition.onerror = (event) => {
-        console.error('Speech recognition error:', event.error);
-        alert('Voice recognition failed. Please try again.');
-      };
-
-      recognition.onend = () => {
-        console.log('Voice recognition ended.');
-      };
-    }
-
-    $('#today-note-voice').addEventListener('click', () => startVoiceInput('today-note'));
-    $('#note-voice').addEventListener('click', () => startVoiceInput('note-body'));
-    $('#task-note-voice').addEventListener('click', () => startVoiceInput('task-note'));
-
-
-    // ---- Navigation ----
-    const views = ['dashboard','notes','calendar','tasks','checklist','graphs', 'timeline'];
-    function show(view){
-      $$('.nav button').forEach(b=>b.classList.toggle('active', b.dataset.view===view));
-      views.forEach(v=>{ const el = document.getElementById('view-'+v); if(el){ el.style.display = (v===view)?'grid':'none'; } });
-      if(view==='graphs') drawCharts();
-      if(view==='timeline') renderTimeline();
-    }
-    $$('.nav button[data-view]').forEach(b=>b.addEventListener('click', e=> show(b.dataset.view)));
-    $$('[data-view-link]').forEach(b=>b.addEventListener('click', e=> show(b.getAttribute('data-view-link'))));
-
-    // ---- Topbar Today ----
-    function setTodayChip(){ $('#today-chip').textContent = new Date().toLocaleString([], {weekday:'long', month:'short', day:'numeric'}) }
-    setTodayChip(); setInterval(setTodayChip, 60_000);
-
-    // ---- Dashboard Quick Add ----
-    $('#qa-add').addEventListener('click', ()=>{
-      const title=$('#qa-title').value.trim(); const when=$('#qa-date').value; const note=$('#qa-note').value.trim();
-      if(!title||!when) return alert('Please enter a title and date');
-      store.data.tasks.push({ id:crypto.randomUUID(), title, when, note, done:false, created:Date.now() });
-      $('#qa-title').value=''; $('#qa-date').value=''; $('#qa-note').value='';
-      store.save(); show('tasks');
-    });
-
-    $('#save-today-note').addEventListener('click', ()=>{
-      const body = $('#today-note').value.trim(); if(!body) return alert('Write something first 😊');
-      store.data.notes.push({ id:crypto.randomUUID(), title:'Today', body, lock:null, created:Date.now() });
-      $('#today-note').value=''; store.save(); show('notes');
-    });
-
-    // ---- Notes ----
-    $('#add-note').addEventListener('click', ()=>{
-      const title=$('#note-title').value.trim()||'Untitled';
-      const lock=$('#note-lock').value||null; const body=$('#note-body').value.trim();
-      if(!body) return alert('Write a note first');
-      store.data.notes.unshift({ id:crypto.randomUUID(), title, lock, body, created:Date.now() });
-      $('#note-title').value=''; $('#note-lock').value=''; $('#note-body').value='';
-      store.save();
-    });
-
-    function renderNotes(filter=''){
-      const wrap = $('#notes-list'); wrap.innerHTML='';
-      const q = filter.toLowerCase();
-      const items = store.data.notes
-        .filter(n=> n.title.toLowerCase().includes(q) || (n.body||'').toLowerCase().includes(q))
-        .sort((a,b)=>b.created-a.created);
-      if(!items.length){ wrap.innerHTML = `<p class="muted">No notes yet.</p>`; return; }
-      items.forEach(n=>{
-        const locked = n.lock && new Date(n.lock)>new Date();
-        const div = document.createElement('div'); div.className='task';
-        div.innerHTML = `
-          <div class="badge">${n.title}</div>
-          <div>
-            <div class="muted">${n.lock?`Unlocks: ${fmtDate(n.lock)}`:'—'}</div>
-            <div style="margin-top:6px">${locked?'<em class="muted">🔒 Locked</em>':n.body.replace(/</g,'&lt;')}</div>
-          </div>
-          <div style="display:flex; gap:8px">
-            <button class="btn secondary" data-note="${n.id}">Delete</button>
-          </div>`;
-        div.querySelector('[data-note]')?.addEventListener('click',()=>{ store.data.notes = store.data.notes.filter(x=>x.id!==n.id); store.save(); })
-        wrap.appendChild(div);
-      });
-    }
-
-    // ---- Tasks ----
-    $('#add-task').addEventListener('click', ()=>{
-      const title=$('#task-title').value.trim(); const when=$('#task-date').value; const note=$('#task-note').value.trim();
-      if(!title||!when) return alert('Please enter a title and date');
-      store.data.tasks.unshift({ id:crypto.randomUUID(), title, when, note, done:false, created:Date.now() });
-      $('#task-title').value=''; $('#task-date').value=''; $('#task-note').value='';
-      store.save();
-    });
-
-    function renderTasks(filter=''){
-      const list=$('#task-list'); list.innerHTML='';
-      const q = filter.toLowerCase();
-      const items = store.data.tasks
-        .filter(t=> t.title.toLowerCase().includes(q) || (t.note||'').toLowerCase().includes(q))
-        .sort((a,b)=> new Date(a.when)-new Date(b.when));
-      if(!items.length){ list.innerHTML = `<p class="muted">No tasks.</p>`; return; }
-      items.forEach(t=>{
-        const row=document.createElement('div'); row.className='task'+(t.done?' done':'');
-        const overdue = !t.done && new Date(t.when) < new Date();
-        row.innerHTML=`
-          <input type="checkbox" ${t.done?'checked':''} />
-          <div>
-            <div style="font-weight:700">${t.title.replace(/</g,'&lt;')}</div>
-            <div class="muted">${fmtDateTime(t.when)} ${overdue?'<span class="badge" style="border-color:rgba(255,107,107,.4); color:#ffb3b3">Overdue</span>':''}</div>
-            ${t.note?`<div style="margin-top:6px">${t.note.replace(/</g,'&lt;')}</div>`:''}
-          </div>
-          <div style="display:flex; gap:8px">
-            <button class="btn secondary" data-del="${t.id}">Delete</button>
-          </div>`;
-        row.querySelector('input').addEventListener('change', e=>{ t.done=e.target.checked; store.save(); });
-        row.querySelector('[data-del]')?.addEventListener('click',()=>{ store.data.tasks = store.data.tasks.filter(x=>x.id!==t.id); store.save(); })
-        list.appendChild(row);
-      })
-    }
-
-    // Upcoming in dashboard
-    function renderUpcoming(){
-      const wrap = $('#upcoming'); wrap.innerHTML='';
-      const soon = [...store.data.tasks]
-        .filter(t=>!t.done)
-        .sort((a,b)=> new Date(a.when)-new Date(b.when))
-        .slice(0,5);
-      if(!soon.length){ wrap.innerHTML = `<p class="muted">No upcoming deadlines 🎉</p>`; return; }
-      soon.forEach(t=>{
-        const el = document.createElement('div'); el.className='task';
-        el.innerHTML=`<div class="badge">Due</div><div><div style="font-weight:700">${t.title.replace(/</g,'&lt;')}</div><div class="muted">${fmtDateTime(t.when)}</div></div><div><button class="btn" onclick="markDone('${t.id}')">Mark done</button></div>`;
-        wrap.appendChild(el);
-      })
-    }
-    window.markDone = (id)=>{ const t=store.data.tasks.find(x=>x.id===id); if(t){ t.done=true; store.save(); } };
-
-    // Progress ring
-    function renderProgress(){
-      const total = store.data.tasks.length; const done = store.data.tasks.filter(t=>t.done).length;
-      const pct = total? Math.round(done/total*100) : 0;
-      const ring = $('#progress-ring');
-      ring.style.setProperty('--p', pct);
-      $('#progress-text').textContent = pct+"%";
-      $('#progress-sub').textContent = `${done} of ${total} tasks done`;
-      updateBadges();
-    }
-
-    // ---- Checklist ----
-    $('#check-add').addEventListener('click', ()=>{
-      const v = $('#check-input').value.trim(); if(!v) return;
-      store.data.checklist.push({ id:crypto.randomUUID(), text:v, completed:false });
-      $('#check-input').value=''; store.save();
-    })
-    function renderChecklist(filter=''){
-      const wrap = $('#check-list'); wrap.innerHTML='';
-      const q = filter.toLowerCase();
-      const items = store.data.checklist.filter(c=>c.text.toLowerCase().includes(q));
-      if(!items.length){ wrap.innerHTML = `<p class="muted">No items.</p>`; return; }
-      items.forEach(c=>{
-        const row = document.createElement('div'); row.className='check';
-        if(c.completed) row.classList.add('done');
-        row.innerHTML = `<div style="flex:1">${c.text.replace(/</g,'&lt;')}</div><button class="btn secondary" data-complete="${c.id}">Completed</button><button class="btn secondary" data-del="${c.id}">Delete</button>`;
-        row.querySelector('[data-complete]').addEventListener('click', e=>{ c.completed=true; store.save(); })
-        row.querySelector('[data-del]')?.addEventListener('click',()=>{ store.data.checklist = store.data.checklist.filter(x=>x.id!==c.id); store.save(); })
-        wrap.appendChild(row);
-      })
-    }
-
-    // ---- Calendar ----
-    function renderCalendar() {
-      const calendar = document.getElementById("calendar");
-      calendar.innerHTML = "";
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = today.getMonth();
-
-      const firstDay = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-      // Empty slots before first day
-      for (let i = 0; i < firstDay; i++) {
-        const emptyDay = document.createElement("div");
-        emptyDay.className = "day other";
-        calendar.appendChild(emptyDay);
-      }
-
-      // Days of month
-      for (let d = 1; d <= daysInMonth; d++) {
-        const date = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-        const dayBox = document.createElement("div");
-        dayBox.className = "day";
-        dayBox.setAttribute("data-date", date);
-        dayBox.innerHTML = `<strong>${d}</strong>`;
-
-        const tasksForDay = store.data.tasks.filter(t => t.when && t.when.startsWith(date));
-        tasksForDay.forEach(task => {
-            const taskEl = document.createElement("div");
-            taskEl.className = "task";
-            taskEl.textContent = task.title;
-            dayBox.appendChild(taskEl);
-        });
-
-        calendar.appendChild(dayBox);
-      }
-    }
-
-    function saveTask() {
-      const title = document.getElementById("taskTitle").value;
-      const date = document.getElementById("taskDate").value;
-
-      if (!title || !date) {
-        alert("Please enter both title and date");
-        return;
-      }
-
-      store.data.tasks.push({ id: crypto.randomUUID(), title, when: date, note: '', done: false, created: Date.now() });
-      store.save();
-
-      document.getElementById("taskTitle").value = "";
-      document.getElementById("taskDate").value = "";
-    }
-
-    function renderTaskList() {
-        const taskList = document.getElementById("taskList");
-        taskList.innerHTML = "";
-        if (!store.data.tasks.length) {
-            taskList.innerHTML = `<p class="muted">No tasks yet.</p>`;
-            return;
-        }
-
-        const sortedTasks = store.data.tasks.sort((a,b) => new Date(a.when) - new Date(b.when));
-
-        sortedTasks.forEach(t => {
-            const li = document.createElement("li");
-            li.textContent = `${t.title} (${t.when})`;
-            taskList.appendChild(li);
-        });
-    }
-
-    // ---- Charts ----
-    let pie, bar, checklistPie;
-    function drawCharts(){
-      const ctx1 = document.getElementById('pie');
-      const ctx2 = document.getElementById('bar');
-      const ctx3 = document.getElementById('checklist-pie');
-
-      // Task Charts
-      const totalTasks = store.data.tasks.length;
-      const doneTasks = store.data.tasks.filter(t => t.done).length;
-      const pendingTasks = totalTasks - doneTasks;
-      if(pie) pie.destroy();
-      pie = new Chart(ctx1, {
-          type:'doughnut',
-          data:{
-              labels:['Done','Pending'],
-              datasets:[{ data:[doneTasks,pendingTasks], backgroundColor:['var(--accent)','rgba(255,255,255,.08)'] }]
-          },
-          options:{
-              plugins:{ legend:{ labels:{ color:'#cfe9ff' } } }
-          }
-      });
-
-      const days=[...Array(7)].map((_,i)=>{ const d=new Date(); d.setDate(d.getDate()- (6-i)); return d });
-      const counts = days.map(d=> store.data.tasks.filter(t=> isSameDay(t.when, d) && t.done).length);
-      if(bar) bar.destroy();
-      bar = new Chart(ctx2, {
-          type:'bar',
-          data:{
-              labels:days.map(d=> d.toLocaleDateString([], { weekday:'short'})),
-              datasets:[{ label:'Completed Tasks', data:counts, backgroundColor:'var(--accent-2)' }]
-          },
-          options:{
-              scales:{ x:{ ticks:{ color:'#cfe9ff'} }, y:{ ticks:{ color:'#cfe9ff'} } },
-              plugins:{ legend:{ labels:{ color:'#cfe9ff'} } }
-          }
-      });
-
-      // Checklist Chart
-      const totalChecklist = store.data.checklist.length;
-      const doneChecklist = store.data.checklist.filter(c => c.completed).length;
-      const pendingChecklist = totalChecklist - doneChecklist;
-      if(checklistPie) checklistPie.destroy();
-      checklistPie = new Chart(ctx3, {
-          type:'doughnut',
-          data:{
-              labels:['Completed','Pending'],
-              datasets:[{ data:[doneChecklist, pendingChecklist], backgroundColor:['var(--accent)','rgba(255,255,255,.08)'] }]
-          },
-          options:{
-              plugins:{ legend:{ labels:{ color:'#cfe9ff' } } }
-          }
-      });
-    }
-
-    // ---- Timeline ----
-    function renderTimeline() {
-        const container = $('#timeline-container');
-        container.innerHTML = '';
-        const allItems = [
-            ...store.data.tasks.map(t => ({...t, type: 'task'})),
-            ...store.data.notes.map(n => ({...n, type: 'note'}))
-        ].sort((a, b) => new Date(b.created) - new Date(a.created));
-
-        if (allItems.length === 0) {
-            container.innerHTML = '<p class="muted">Your timeline is empty. Add a note or a task to start your journey!</p>';
-            return;
-        }
-
-        allItems.forEach(item => {
-            const itemEl = document.createElement('div');
-            itemEl.className = 'timeline-item';
-            itemEl.innerHTML = `
-                <div class="timeline-date">${fmtDate(item.created)}</div>
-                <div class="timeline-content">
-                    <span class="badge">${item.type === 'task' ? 'Task' : 'Note'}</span>
-                    <h3>${item.title}</h3>
-                    <p>${item.type === 'task' ? item.note || 'No details' : item.body}</p>
-                </div>
-            `;
-            container.appendChild(itemEl);
-        });
-    }
-
-    // ---- Gamification ----
-    function updateBadges() {
-        const doneTasksCount = store.data.tasks.filter(t => t.done).length;
-        const badgesContainer = $('#badges-container');
-        badgesContainer.innerHTML = '';
-
-        if (doneTasksCount >= 10) {
-            badgesContainer.innerHTML += '<div class="badge">👑 Completionist</div>';
-        }
-        if (doneTasksCount >= 25) {
-            badgesContainer.innerHTML += '<div class="badge">🚀 Pro Achiever</div>';
-        }
-    }
-
-
-    // ---- Search ----
-    $('#search').addEventListener('input', e=>{
-      const q=e.target.value;
-      renderTasks(q);
-      renderNotes(q);
-      renderChecklist(q);
-    })
-
-    // ---- Clear ----
-    $('#clear-all').addEventListener('click', ()=>{
-      if(confirm('Delete all tasks, notes, and checklist items?')){ store.data={tasks:[], notes:[], checklist:[]}; store.save(); }
-    })
-
-    // ---- Refresh UI ----
-    function refresh(){
-      renderProgress();
-      renderUpcoming();
-      renderTasks($('#search').value||'');
-      renderNotes($('#search').value||'');
-      renderChecklist($('#search').value||'');
-      renderCalendar();
-      renderTaskList();
-      updateBadges();
-      // renderTimeline(); // Re-render when switching to this view
-    }
-
-    // Initial
-    refresh();
-    show('dashboard');
-
-
-    function startVoiceInput(textareaId) {
-    if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
-        alert('Voice-to-Text is not supported in this browser. Please use Chrome or Edge for this feature.');
-        return;
-    }
-
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    const textarea = document.getElementById(textareaId);
-
-    recognition.lang = 'en-US';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    // A simple visual indicator that listening has started
-    const voiceButton = document.getElementById(textareaId.replace('note', 'note-voice'));
-    voiceButton.textContent = '🔴 Listening...';
-
-    recognition.start();
-
-    recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        textarea.value += transcript + ' ';
-    };
-
-    recognition.onerror = (event) => {
-        console.error('Speech recognition error:', event.error);
-        if (event.error === 'not-allowed') {
-            alert('Permission Denied 🚫. Please enable your microphone in the browser settings to use Voice-to-Text.');
-        } else {
-            alert('An error occurred. Please try again or check your microphone.');
-        }
-    };
-
-    recognition.onend = () => {
-        // Reset the button text when listening stops
-        voiceButton.textContent = '🎤';
-    };
-}
-  </script>
+   <script src="./script.js"></script>
+  
 </body>
 </html>

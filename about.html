@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About Time Capsule</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --bg: #1a0f1b;
+      --card: rgba(255,255,255,.06);
+      --muted: rgba(255,255,255,.3);
+      --text: #fff;
+      --accent-1: #c973a4;
+      --accent-2: #e098c4;
+      --accent-3: #f5b9d8;
+      --accent-4: #f7c9e0;
+      --accent-5: #fbd6ec;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --font: 'Inter', sans-serif;
+    }
+    body {
+      background: linear-gradient(rgba(26, 15, 27, 0.85), rgba(26, 15, 27, 0.85)),
+                  url("main.png") no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text);
+      font-family: var(--font);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 2rem;
+      box-sizing: border-box;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 800px;
+      padding: 2rem;
+      background: var(--card);
+      border-radius: 24px;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent-2);
+      margin-bottom: 1rem;
+    }
+    p {
+      color: var(--text);
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 2rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    li {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem 1.5rem;
+      border-radius: 16px;
+      font-weight: 600;
+      color: var(--accent-5);
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease-in-out;
+      flex: 1 1 200px;
+    }
+    li:hover {
+      transform: translateY(-5px) scale(1.03);
+    }
+    .icon {
+      margin-right: 8px;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.8rem 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+      background: var(--accent-2);
+      border: none;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .btn:hover {
+      background: var(--accent-3);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>About Time Capsule</h1>
+    <p>Welcome to Time Capsule, your personal space for future planning, self-reflection, and goal tracking. Our mission is to help you capture your thoughts, plan your future, and keep track of your journey, one step at a time.</p>
+    <p>This application features a minimalist design inspired by cherry blossoms, providing a calm and focused environment. It's more than just a planner—it's a digital record of your growth, designed to help you stay organized and motivated.</p>
+
+    <ul>
+        <li><i class="fas fa-calendar-alt icon"></i>Future Planning</li>
+        <li><i class="fas fa-tasks icon"></i>Remainder & Tasks</li>
+        <li><i class="fas fa-sticky-note icon"></i>Personal Notes</li>
+        <li><i class="fas fa-chart-line icon"></i>Progress Tracking</li>
+        <li><i class="fas fa-calendar-check icon"></i>Interactive Calendar</li>
+    </ul>
+
+    <p>Thank you for choosing Time Capsule. We hope it helps you build a better future, one memory and one goal at a time.</p>
+
+    <!-- 🚀 Desktop Button -->
+    <a href="index.html" class="btn">Go to Desktop</a>
+</div>
+
+</body>
+</html>
