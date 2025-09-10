@@ -63,7 +63,3 @@ The design philosophy is centered around a calming and aesthetically pleasing us
 The use of an elegant `Inter` font and minimalist icons keeps the interface clean and easy to navigate.
 
 ---
-
-## 📄 License
-
-This project is open-source and available under the MIT License.
