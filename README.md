@@ -1,6 +1,4 @@
-# notes-Time-Capsule-App
-The Time Capsule is a personal organization web app using HTML, CSS, and vanilla JavaScript. It helps users manage tasks, notes, checklists, and track progress. Features include a calendar view, progress graphs, gamification badges, and voice-to-text functionality. All data is stored locally in the browser for privacy.
-# ⏳ Time Capsule: Personal Organizer & Productivity Dashboard 🌸
+⏳ Time Capsule: Personal Organizer & Productivity Dashboard 
 
 **Time Capsule** is a beautiful, cherry-blossom-themed web application designed to help you organize your life, manage tasks, and reflect on your personal journey. It’s a simple, elegant tool that combines task management with a journaling and timeline feature, helping you stay productive and mindful of your progress. This project was developed with a little help from Gemini, an AI assistant.
 
